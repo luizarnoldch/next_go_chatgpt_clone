@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: postgres-local
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: file_store
+    volumes:
+      - "../../tmp/psql/data:/var/lib/postgresql/data"
+    working_dir: /var/lib/postgresql/data
+  # backend:
+  #   build:
+  #     context: ./server
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "${SERVER_PORT}:4000"
+  # frontend:
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "${CLIENT_PORT}:3000"
