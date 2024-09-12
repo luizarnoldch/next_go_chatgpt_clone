@@ -6,6 +6,11 @@ update:
 	go mod tidy
 dev:
 	go run main.go
+test:
+	go clean -testcache
+	go test ./... -v
+psql-cmd:
+	docker exec -it postgres-local psql -U postgres -d chatgpt_clone
 psql-up:
 	docker-compose -f $(PSQL-LOCAL) up -d
 psql-stop:

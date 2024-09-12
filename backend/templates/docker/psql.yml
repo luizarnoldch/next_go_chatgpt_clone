@@ -6,7 +6,9 @@ services:
     container_name: postgres-local
     environment:
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: file_store
+      POSTGRES_DB: chatgpt_clone
+    ports:
+      - "5432:5432"
     volumes:
       - "../../tmp/psql/data:/var/lib/postgresql/data"
     working_dir: /var/lib/postgresql/data

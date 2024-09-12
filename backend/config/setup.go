@@ -13,12 +13,13 @@ func envSanityCheck() {
 	requiredEnvVariables := []string{
 		"API_HOST",
 		"API_PORT",
+
 		// Uncomment these if you need database variables
-		// "DB_HOST",
-		// "DB_PORT",
-		// "DB_USER",
-		// "DB_PASS",
-		// "DB_SCHEMA",
+		"PSQL_HOST",
+		"PSQL_PORT",
+		"PSQL_USER",
+		"PSQL_PASS",
+		"PSQL_SCHEMA",
 	}
 
 	for _, envVar := range requiredEnvVariables {
@@ -44,6 +45,15 @@ func LoadConfig(filePath string) (*CONFIG, error) {
 				API_HOST: os.Getenv("API_HOST"),
 				API_PORT: os.Getenv("API_PORT"),
 			},
+			DB: DB{
+				PSQL: PSQL{
+					PSQL_HOST:   os.Getenv("PSQL_HOST"),
+					PSQL_PORT:   os.Getenv("PSQL_PORT"),
+					PSQL_USER:   os.Getenv("PSQL_USER"),
+					PSQL_PASS:   os.Getenv("PSQL_PASS"),
+					PSQL_SCHEMA: os.Getenv("PSQL_SCHEMA"),
+				}},
 		},
+		ENV: os.Getenv("ENV"),
 	}, nil
 }

@@ -3,6 +3,7 @@ package config
 type (
 	CONFIG struct {
 		MICRO MICRO
+		ENV string
 	}
 
 	MICRO struct {
