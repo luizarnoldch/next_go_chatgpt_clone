@@ -25,7 +25,7 @@ func ChatCompletion(c *fiber.Ctx) error {
 		})
 	}
 
-	MY_CHATGPT_TOKEN := "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"
+	MY_CHATGPT_TOKEN := ""
 
 	client := openai.NewClient(MY_CHATGPT_TOKEN)
 
