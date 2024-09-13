@@ -5,10 +5,10 @@ INSERT INTO users (username, email, created_at) VALUES
 ('carol', 'carol@example.com', CURRENT_TIMESTAMP);
 
 -- Insertar datos de prueba en la tabla de chats
-INSERT INTO chats (user_id, created_at, system_fingerprint, model_used, total_tokens) VALUES
-(1, CURRENT_TIMESTAMP, 'fingerprint1', 'modelA', 1000),
-(2, CURRENT_TIMESTAMP, 'fingerprint2', 'modelB', 1500),
-(1, CURRENT_TIMESTAMP, 'fingerprint3', 'modelC', 2000);
+INSERT INTO chats (user_id, title, created_at, system_fingerprint, model_used, total_tokens) VALUES
+(1, 'Chat sobre Clima', CURRENT_TIMESTAMP, 'fingerprint1', 'modelA', 1000),
+(2, 'Chat sobre Ejercicio', CURRENT_TIMESTAMP, 'fingerprint2', 'modelB', 1500),
+(1, 'Chat sobre IA', CURRENT_TIMESTAMP, 'fingerprint3', 'modelC', 2000);
 
 -- Insertar datos de prueba en la tabla de mensajes
 INSERT INTO messages (chat_id, role, content, created_at, finish_reason, prompt_tokens, completion_tokens, total_tokens) VALUES

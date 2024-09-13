@@ -19,8 +19,8 @@ func NewChatPSQLRepository(client *sqlx.DB) repository.ChatRepository {
 
 func (r *ChatPSQLRepository) CreateChat(chat *model.Chat) error {
 	_, err := r.client.NamedExec(`
-		INSERT INTO chats (user_id, created_at, system_fingerprint, model_used, total_tokens)
-		VALUES (:user_id, :created_at, :system_fingerprint, :model_used, :total_tokens)
+		INSERT INTO chats (user_id, title, created_at, system_fingerprint, model_used, total_tokens)
+		VALUES (:user_id, :title, :created_at, :system_fingerprint, :model_used, :total_tokens)
 	`, chat)
 	if err != nil {
 		fiberlog.Infof("Error creating chat: %v", err)
@@ -52,7 +52,7 @@ func (r *ChatPSQLRepository) GetAllChats() ([]model.Chat, error) {
 func (r *ChatPSQLRepository) UpdateChat(chat *model.Chat) error {
 	_, err := r.client.NamedExec(`
 		UPDATE chats
-		SET user_id = :user_id, created_at = :created_at, system_fingerprint = :system_fingerprint, model_used = :model_used, total_tokens = :total_tokens
+		SET user_id = :user_id, title = :title, created_at = :created_at, system_fingerprint = :system_fingerprint, model_used = :model_used, total_tokens = :total_tokens
 		WHERE id = :id
 	`, chat)
 	if err != nil {

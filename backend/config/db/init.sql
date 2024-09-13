@@ -27,11 +27,13 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS chats (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE SET NULL,
+    title VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     system_fingerprint VARCHAR(255),
     model_used VARCHAR(255),
     total_tokens INT
 );
+
 
 -- Tabla para almacenar los mensajes (preguntas y respuestas)
 CREATE TABLE IF NOT EXISTS messages (

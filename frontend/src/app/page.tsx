@@ -1,87 +1,55 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react'
+import ChatBox from '@/components/chat-box/ChatBox';
+import Topvar from '@/components/topvar/Topvar';
+import React, { useState } from 'react';
 
-// Definir el tipo para los mensajes del chat
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
+type Props = {};
 
-const HomePage: React.FC = () => {
-  const [message, setMessage] = useState<string>('');         // Tipo explícito para el mensaje
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);  // Tipo explícito para el historial del chat
+const HomePage = (props: Props) => {
+  const [title, setTitle] = useState<string>("title default"); // Para capturar el título del chat
 
-  // Función para manejar el envío del mensaje
-  const handleSendMessage = async () => {
-    if (message.trim() === '') return;
+  // Función para crear un nuevo chat
+  const sendMessage = async (input: string) => {
+    // Datos que serán enviados a la API para crear un nuevo chat
+
+    const chatData = {
+      title: title,
+      lastMessage: input,
+      user_id: 1, // Aquí puedes definir el user_id que corresponda
+      system_fingerprint: 'fingerprint1', // Puedes cambiar esto o generarlo dinámicamente
+      model_used: 'modelA', // Modelo que se esté utilizando
+      total_tokens: 1000, // Número de tokens o puedes calcularlo
+    };
 
     try {
-      // // Enviar el mensaje al endpoint utilizando fetch
-      // const response = await fetch('http://localhost:4000/chat/completion', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     role: 'user',
-      //     content: message,
-      //   }),
-      // });
+      const response = await fetch('http://localhost:4000/chats', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(chatData), // Enviar los datos en formato JSON
+      });
 
-      // // Convertir la respuesta a JSON
-      // const data = await response.json();
+      if (!response.ok) {
+        throw new Error('Error creating chat');
+      }
 
-      // // Obtener el mensaje del asistente de la respuesta
-      // const assistantMessage = data.choices[0].message.content;
-
-      const assistantMessage = "¡Hola! ¿Cómo puedo ayudarte hoy?"
-
-      // Actualizar el historial del chat con el mensaje del usuario y la respuesta del asistente
-      setChatHistory((prevChatHistory) => [
-        ...prevChatHistory,
-        { role: 'user', content: message },
-        { role: 'assistant', content: assistantMessage },
-      ]);
-
-      // Limpiar el campo del mensaje
-      setMessage('');
-
+      const data = await response.json();
+      console.log('Chat created:', data);
+      // Puedes hacer algo aquí después de que el chat se haya creado, como limpiar los inputs o hacer un refetch.
     } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  };
-
-  // Función para manejar la tecla 'Enter' en el campo de entrada usando 'onKeyDown'
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSendMessage();
+      console.error('Failed to create chat:', error);
     }
   };
 
   return (
-    <div>
-      <h1>Chat</h1>
-      <div className="chat-box">
-        {/* Mostrar el historial del chat */}
-        {chatHistory.map((msg, index) => (
-          <div key={index} className={msg.role === 'user' ? 'user-message' : 'assistant-message'}>
-            <strong>{msg.role === 'user' ? 'You' : 'Assistant'}:</strong> {msg.content}
-          </div>
-        ))}
-      </div>
-
-      {/* Campo de entrada de texto */}
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="Type your message..."
-      />
-      <button onClick={handleSendMessage}>Send</button>
-    </div>
+    <section className="bg-secondary h-screen w-full p-4 flex-1 flex flex-col">
+      <Topvar />
+      <div className="flex-1 m-6" />
+      <ChatBox handleButton={sendMessage} />
+    </section>
   );
-}
+};
 
 export default HomePage;
