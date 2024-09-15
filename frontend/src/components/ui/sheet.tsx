@@ -8,7 +8,6 @@ import { MenuIcon, SquarePenIcon, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // Actions
-import { useActionStore } from "@/stores/create-new-chat"
 import { useSidebarStore } from "@/stores/sidebar-store"
 
 // Components
@@ -19,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./tooltip"
+import Link from "next/link"
 
 const Sheet = SheetPrimitive.Root
 
@@ -70,7 +70,6 @@ const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
 >(({ side = "right", className, children, ...props }, ref) => {
-  const sayHello = useActionStore((state) => state.sayHello)
   const closeMobileSidebar = useSidebarStore((state) => state.closeMobileSidebar)
 
   return (
@@ -104,9 +103,11 @@ const SheetContent = React.forwardRef<
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={sayHello}
+                  asChild
                 >
-                  <SquarePenIcon className="h-6 w-6 cursor-pointer" />
+                  <Link href="/login">
+                    <SquarePenIcon className="h-6 w-6 cursor-pointer" />
+                  </Link>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>

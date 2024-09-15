@@ -18,16 +18,33 @@ func NewChatPSQLRepository(client *sqlx.DB) repository.ChatRepository {
 }
 
 func (r *ChatPSQLRepository) CreateChat(chat *model.Chat) error {
-	_, err := r.client.NamedExec(`
+	// Use the RETURNING clause to get the generated ID
+	query := `
 		INSERT INTO chats (user_id, title, created_at, system_fingerprint, model_used, total_tokens)
 		VALUES (:user_id, :title, :created_at, :system_fingerprint, :model_used, :total_tokens)
-	`, chat)
+		RETURNING id
+	`
+
+	// Execute the query and get the new ID
+	rows, err := r.client.NamedQuery(query, chat)
 	if err != nil {
 		fiberlog.Infof("Error creating chat: %v", err)
 		return err
 	}
+	defer rows.Close()
+
+	// Retrieve the ID from the result
+	if rows.Next() {
+		if err := rows.Scan(&chat.ID); err != nil {
+			fiberlog.Infof("Error scanning returned ID: %v", err)
+			return err
+		}
+	}
+
 	return nil
 }
+
+
 
 func (r *ChatPSQLRepository) GetChatByID(id int) (*model.Chat, error) {
 	var chat model.Chat

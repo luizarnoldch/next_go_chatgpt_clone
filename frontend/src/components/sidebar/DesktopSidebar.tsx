@@ -15,8 +15,6 @@ import { Button } from "@/components/ui/button";
 
 // Stores
 import { useSidebarStore } from "@/stores/sidebar-store"
-// Stores
-import { useActionStore } from "@/stores/create-new-chat"
 
 // Icons
 import { MenuIcon, SquarePenIcon } from "lucide-react";
@@ -31,10 +29,6 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
   const { isDesktopSidebarOpen, closeDesktopSidebar } = useSidebarStore((state) => ({
     isDesktopSidebarOpen: state.isDesktopSidebarOpen,
     closeDesktopSidebar: state.closeDesktopSidebar,
-  }))
-
-  const { sayHello } = useActionStore((state) => ({
-    sayHello: state.sayHello
   }))
 
   return (
@@ -65,9 +59,11 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={sayHello}
+                  asChild
                 >
-                  <SquarePenIcon className="h-6 w-6 cursor-pointer" />
+                  <Link href="/">
+                    <SquarePenIcon className="h-6 w-6 cursor-pointer" />
+                  </Link>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>

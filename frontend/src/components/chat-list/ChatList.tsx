@@ -1,7 +1,11 @@
 "use client";
 
+// Lib
 import React, { useEffect, useState, useCallback } from 'react';
 import ChatListItem from './ChatListItem';
+
+// Stores
+import { useNewChatStore } from "@/stores/create-new-chat"
 
 export type Chat = {
   id: number;
@@ -24,6 +28,11 @@ const ChatList: React.FC = () => {
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { isNewChatCreated, markChatAsNotCreated } = useNewChatStore((state) => ({
+    isNewChatCreated: state.isNewChatCreated,
+    markChatAsNotCreated: state.markChatAsNotCreated,
+  }))
 
   // Fetch chats from the backend
   const fetchChats = useCallback(async () => {
@@ -49,17 +58,19 @@ const ChatList: React.FC = () => {
   // Fetch chats when the component mounts
   useEffect(() => {
     fetchChats();
-  }, [fetchChats]);
+  }, []);
+
+  // Refetch cuando isRefetchNeeded cambia a true
+  useEffect(() => {
+    if (isNewChatCreated) {
+      fetchChats();
+      markChatAsNotCreated(); // Limpia el estado después del refetch
+    }
+  }, [isNewChatCreated, fetchChats, markChatAsNotCreated]);
 
   return (
     <div className="flex flex-col h-full w-full">
       <h3 className="text-lg py-2">Chats</h3>
-      <button
-        onClick={fetchChats}
-        className="self-start px-4 py-2 bg-blue-500 text-white rounded-md mb-4"
-      >
-        Refetch Chats
-      </button>
       {loading && <p>Loading chats...</p>}
       {error && <p className="text-red-500">{error}</p>}
       <div className="flex flex-col gap-2">

@@ -21,7 +21,6 @@ import {
 
 // Stores
 import { useSidebarStore } from "@/stores/sidebar-store"
-import { useActionStore } from "@/stores/create-new-chat"
 
 // Icons
 import ChatGPTIcon from "../assets/icons/ChatGPTIcon"
@@ -36,9 +35,6 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ }) => {
     closeMobileSidebar: state.closeMobileSidebar,
   }))
 
-  const { sayHello } = useActionStore((state) => ({
-    sayHello: state.sayHello
-  }))
 
   return (
     <Sheet open={isMobileSidebarOpen} onOpenChange={closeMobileSidebar}>

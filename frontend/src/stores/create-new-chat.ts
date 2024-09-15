@@ -1,12 +1,14 @@
 // stores/useActionStore.ts
-import { create } from "zustand"
+import { create } from "zustand";
 
-interface ActionState {
-  sayHello: () => void
+interface NewChatState {
+  isNewChatCreated: boolean;
+  markChatAsCreated: () => void;
+  markChatAsNotCreated: () => void;
 }
 
-export const useActionStore = create<ActionState>((set) => ({
-  sayHello: () => {
-    console.log("Hello World")
-  },
-}))
+export const useNewChatStore = create<NewChatState>((set) => ({
+  isNewChatCreated: true,
+  markChatAsCreated: () => set({ isNewChatCreated: true }),
+  markChatAsNotCreated: () => set({ isNewChatCreated: false }),
+}));

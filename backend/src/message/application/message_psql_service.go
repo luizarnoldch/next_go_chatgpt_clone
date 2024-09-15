@@ -3,6 +3,7 @@ package application
 import (
 	"main/src/message/domain/model"
 	"main/src/message/domain/repository"
+	"time"
 )
 
 type MessagePSQLServie struct {
@@ -16,17 +17,25 @@ func NewMessagePSQLServie(repositoty repository.MessageRepository) MessageServic
 }
 
 func (s MessagePSQLServie) CreateMessage(message *model.Message) error {
+
+	if message.CreatedAt.IsZero() {
+		message.CreatedAt = time.Now()
+	}
 	return s.r.CreateMessage(message)
 }
+
 func (s MessagePSQLServie) GetMessageByID(id int) (*model.Message, error) {
 	return s.r.GetMessageByID(id)
 }
+
 func (s MessagePSQLServie) GetAllMessages() ([]model.Message, error) {
 	return s.r.GetAllMessages()
 }
+
 func (s MessagePSQLServie) UpdateMessage(message *model.Message) error {
 	return s.r.UpdateMessage(message)
 }
+
 func (s MessagePSQLServie) DeleteMessage(id int) error {
 	return s.r.DeleteMessage(id)
 }

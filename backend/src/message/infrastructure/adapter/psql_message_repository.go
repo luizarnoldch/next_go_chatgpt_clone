@@ -17,14 +17,28 @@ func NewMessagePSQLRepository(client *sqlx.DB) repository.MessageRepository {
 }
 
 func (r *MessagePSQLRepository) CreateMessage(message *model.Message) error {
-	_, err := r.client.NamedExec(`
+	// Use the RETURNING clause to get the generated ID
+	query := `
 		INSERT INTO messages (chat_id, role, content, created_at, finish_reason, prompt_tokens, completion_tokens, total_tokens)
-		VALUES (:chat_id, :role, :content, :created_at, :finish_reason, :prompt_tokens, :completion_tokens, :total_tokens)
-	`, message)
+		VALUES (:chat_id, :role, :content, :created_at, :finish_reason, :prompt_tokens, :completion_tokens, :total_tokens) RETURNING id
+	`
+
+	// Execute the query and get the new ID
+	rows, err := r.client.NamedQuery(query, message)
 	if err != nil {
-		fiberlog.Infof("Error creating message: %v", err)
+		fiberlog.Infof("Error creating chat: %v", err)
 		return err
 	}
+	defer rows.Close()
+
+	// Retrieve the ID from the result
+	if rows.Next() {
+		if err := rows.Scan(&message.ID); err != nil {
+			fiberlog.Infof("Error scanning returned ID: %v", err)
+			return err
+		}
+	}
+
 	return nil
 }
 
